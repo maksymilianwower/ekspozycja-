@@ -1,19 +1,235 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>ekspozycja</title>
+    <title>ekspozycja – strona główna</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Unica+One&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Unica+One&family=Inter:wght@400;600&display=swap');
+    
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfdfd;
+            color: #111;
+            scroll-behavior: smooth;
+        }
+    
+        .section {
+            padding: 100px 50px; /* zwiększony padding z lewej i prawej */
+            text-align: left;
+            max-width: 960px;
+            margin: 0 auto; /* wyśrodkowanie na większych ekranach */
+        }
+    
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            padding: 15px 30px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+    
+        .top-bar a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+    
+        h1 {
+            font-family: 'Unica One', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+    
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+    
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 700px;
+        }
+        .gallery-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 80px;
+            margin-bottom: 80px;
+        }
+        .gallery-box {
+            width: 280px;
+            height: 180px;
+            background-color: #eee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: #555;
+            border-radius: 8px;
+            text-align: center;
+            padding: 10px;
+        }
+    
+        .gallery-box strong {
+            font-size: 1.1rem;
+            color: #000;
+            margin-bottom: 5px;
+        }
+        .gallery-box {
+    transition: all 0.2s ease;
+    text-decoration: none;
+        }.gallery-box:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .section {
+    padding: 100px 50px 120px 50px;
+        }
+
+
+    </style>
+    
 </head>
 <body>
-    <h1>Welcome to ekspozycja</h1>
-    <p>This is your photography-based Flask project.</p>
 
-    <div style="margin-top: 20px;">
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <input type="file" name="photo">
-            <button type="submit">Upload Photo</button>
-        </form>
+    <!-- Pasek górny -->
+    <div class="top-bar">
+        {% if username %}
+            <span style="margin-right: auto; font-weight: bold;">Witaj, {{ username }}</span>
+            <a href="{{ url_for('user_panel') }}">Konto</a>
+            <a href="{{ url_for('logout') }}">Wyloguj się</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Zaloguj się</a>
+            <a href="{{ url_for('register') }}">Zarejestruj się</a>
+        {% endif %}
     </div>
+    
+
+    <!-- Zawartość główna -->
+    <div class="main-content">
+        <h1>ekspozycja</h1>
+        <p>
+            Miejsce stworzone z myślą o Tobie. Twojej sztuce. Twojej historii.<br>
+            Dziel się fotografią i odkrywaj twórczość innych.
+        </p>
+
+        {% if not username %}
+            <div class="cta">
+                <p><a href="{{ url_for('register') }}">Załóż konto</a>, aby tworzyć swoją przestrzeń.</p>
+            </div>
+        {% endif %}
+    </div>
+    <!-- Sekcja powitalna -->
+<div class="section" style="padding-top: 120px;">
+    <p>Miejsce stworzone z myślą o Tobie. Twojej sztuce. Twojej historii.</p>
+</div>
+<!-- O projekcie -->
+<div class="section" style="background-color: #f0f0f0;">
+    <h2>O PROJEKCIE</h2>
+    <p>
+        ekspozycja to miejsce, w którym twórcy mogą dzielić się swoimi pracami, odkrywać inspiracje i budować własne galerie.
+        Naszą misją jest wspieranie kreatywności i tworzenie przestrzeni do ekspresji wizualnej.
+    </p>
+</div>
+
+ <!-- Galerie główne -->
+<div class="gallery-preview">
+    ...
+</div>
+
+<div class="gallery-preview">
+    <a href="{{ url_for('gallery_maksiu') }}" class="gallery-box">
+        <strong>Maksiu_photos</strong><br>
+        Fotografia uliczna i reportaż
+    </a>
+    <a href="{{ url_for('gallery_mikolaj') }}" class="gallery-box">
+        <strong>mikolaj.sapek</strong><br>
+        Podróże, natura i detal
+    </a>
+</div>
+
+
+<!-- Call to Action -->
+<div class="section" style="background-color: #f0f0f0;">
+    <h2>Dołącz do twórców</h2>
+    <p>
+        Załóż konto i zacznij tworzyć własną ekspozycję. To proste – wystarczy kilka kliknięć.
+    </p>
+    {% if not username %}
+        <p><a href="{{ url_for('register') }}">Kliknij tutaj, aby się zarejestrować</a></p>
+    {% endif %}
+</div>
+
+<!-- Galerie użytkowników -->
+<div style="max-width: 600px; margin: 80px auto; text-align: center;">
+    <h2>Galerie użytkowników</h2>
+
+    {% if galleries %}
+        <table style="margin: 40px auto; border-collapse: collapse;">
+            <tbody>
+                {% for gallery in galleries %}
+                    <tr>
+                        <td style="padding: 12px 20px; font-size: 1.2rem;">
+                            <p>
+                                {{ gallery.title }}
+                                {% if gallery.user %}
+                                  – {{ gallery.user.username }}
+                                {% else %}
+                                  – (brak autora)
+                                {% endif %}
+                              </p>
+                              
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p style="color: #777;">Brak dostępnych galerii.</p>
+    {% endif %}
+</div>
+<!-- STOPKA Z FORMULARZEM KONTAKTOWYM -->
+<div style="background-color: #f2f2f2; padding: 40px; margin-top: 100px;">
+    <div style="max-width: 960px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap;">
+        
+        <div>
+            <h3>O projekcie</h3>
+            <p style="max-width: 360px;">
+                ekspozycja to platforma dla fotografów i pasjonatów obrazu. Twórz, dziel się i odkrywaj.
+            </p>
+        </div>
+
+        <div style="min-width: 280px;">
+            <h3>Skontaktuj się z nami</h3>
+            <form action="#" method="POST">
+                <input type="text" name="name" placeholder="Imię" required style="width: 100%; margin-bottom: 10px; padding: 8px;">
+                <input type="email" name="email" placeholder="Email" required style="width: 100%; margin-bottom: 10px; padding: 8px;">
+                <textarea name="message" rows="4" placeholder="Wiadomość" required style="width: 100%; padding: 8px;"></textarea>
+                <button type="submit" style="margin-top: 10px; background: #0077aa; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">
+                    Wyślij
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 </body>
 </html>
+
+
+
+
+

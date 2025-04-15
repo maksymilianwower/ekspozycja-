@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Szczegóły zdjęcia</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>{{ photo.title or 'Zdjęcie' }}</h1>
+
+    <div>
+        <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" style="max-width: 600px;">
+    </div>
+
+    <p><strong>Opis:</strong> {{ photo.description or 'Brak opisu.' }}</p>
+
+    <!-- Lajki -->
+    <form method="POST" action="{{ url_for('like_photo', photo_id=photo.id) }}">
+        <button type="submit">❤️ Lubię to ({{ photo.likes|length }})</button>
+    </form>
+
+    <!-- Komentarze -->
+    <h3>Komentarze:</h3>
+    <ul>
+        {% for comment in photo.comments %}
+            <li><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Dodaj komentarz -->
+    <form method="POST" action="{{ url_for('comment_photo', photo_id=photo.id) }}">
+        <textarea name="content" placeholder="Dodaj komentarz..." required></textarea><br>
+        <button type="submit">Dodaj komentarz</button>
+    </form>
+
+    <p><a href="{{ url_for('view_gallery', gallery_id=photo.gallery_id) }}">← Wróć do galerii</a></p>
+<!-- LAJKI -->
+<form action="{{ url_for('like_photo', photo_id=photo.id) }}" method="POST" style="margin-top: 10px;">
+    <button type="submit" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">
+        ❤️ {{ photo.likes|length }}
+    </button>
+</form>
+<!-- KOMENTARZE -->
+<h3>Komentarze</h3>
+
+<form action="{{ url_for('add_comment', photo_id=photo.id) }}" method="POST">
+    <textarea name="content" required placeholder="Dodaj komentarz" style="width: 100%;"></textarea>
+    <button type="submit">Dodaj</button>
+</form>
+
+<ul>
+    {% for comment in photo.comments %}
+        <li><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

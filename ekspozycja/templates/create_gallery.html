@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Nowa galeria</title>
+</head>
+<body>
+    <h1>Stwórz nową galerię</h1>
+    <form method="POST">
+        <label>Nazwa galerii:</label><br>
+        <input type="text" name="title" required><br><br>
+        <button type="submit">Utwórz</button>
+    </form>
+    <p><a href="{{ url_for('user_panel') }}">← Wróć do konta</a></p>
+</body>
+</html>

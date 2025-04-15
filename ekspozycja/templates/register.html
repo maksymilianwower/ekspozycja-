@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejestracja</title>
+    <style>
+        body { font-family: sans-serif; padding: 30px; }
+        .form-box { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        .form-box h2 { margin-bottom: 20px; }
+        input[type="text"], input[type="password"] {
+            width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px;
+        }
+        button { padding: 10px 20px; }
+        .error { color: red; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="form-box">
+        <h2>Rejestracja</h2>
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="post">
+            <input type="text" name="username" placeholder="Nazwa użytkownika" required>
+            <input type="password" name="password" placeholder="Hasło" required>
+            <input type="password" name="password2" placeholder="Powtórz hasło" required>
+            <button type="submit">Zarejestruj się</button>
+        </form>
+        <p>Masz już konto? <a href="{{ url_for('login') }}">Zaloguj się</a></p>
+    </div>
+</body>
+</html>

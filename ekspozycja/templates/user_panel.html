@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel użytkownika</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            padding: 40px;
+            background-color: #fafafa;
+            color: #111;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        a {
+            text-decoration: underline;
+            color: #0077aa;
+        }
+
+        .top-actions {
+            margin-bottom: 20px;
+        }
+
+        .photo-card {
+            width: 240px;
+            background: white;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .photo-card img {
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        .photo-card .title {
+            font-weight: bold;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+
+        .photo-card .description {
+            font-size: 0.9rem;
+            color: #444;
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        .photo-actions {
+            position: absolute;
+            top: 8px;
+        }
+
+        .photo-actions button,
+        .photo-actions a {
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+        }
+
+        .photo-actions .delete {
+            background: red;
+            right: 8px;
+        }
+
+        .photo-actions .edit {
+            background: #0077aa;
+            left: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Panel użytkownika: {{ username }}</h1>
+
+<div class="top-actions">
+    <a href="#" onclick="toggleForm()">+ Stwórz nową galerię</a>
+
+    <div id="create-form" style="display: none; margin-top: 20px;">
+        <form action="{{ url_for('create_gallery') }}" method="POST" enctype="multipart/form-data">
+            <label>Tytuł galerii:</label><br>
+            <input type="text" name="title" required><br><br>
+
+            <label>Nazwa albumu (opcjonalnie):</label><br>
+            <input type="text" name="album"><br><br>
+
+            <label>Dodaj zdjęcia:</label><br>
+            <input type="file" name="photos" multiple><br><br>
+
+            <button type="submit">Zapisz galerię</button>
+        </form>
+    </div>
+
+    <script>
+        function toggleForm() {
+            const form = document.getElementById("create-form");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+    </script>
+</div>
+
+<div class="info">Twoje galerie:</div>
+
+<div class="gallery-list">
+    {% for gallery in galleries %}
+        <div style="margin-bottom: 30px;">
+            <h3>{{ gallery.title }}</h3>
+
+            {% if gallery.photos %}
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    {% for photo in gallery.photos %}
+                        <div class="photo-card">
+                            {% if photo.title %}
+                                <div class="title">{{ photo.title }}</div>
+                            {% endif %}
+
+                            <a href="{{ url_for('photo_detail', photo_id=photo.id) }}">
+                                <img src="{{ url_for('static', filename='uploads/' + photo.filename) }}" alt="Zdjęcie">
+                            </a>
+
+                            {% if photo.description %}
+                                <div class="description">{{ photo.description }}</div>
+                            {% endif %}
+
+                            <div class="photo-actions" style="top: 8px; left: 8px;">
+                                <a href="{{ url_for('edit_photo', photo_id=photo.id) }}" class="edit">✏️</a>
+                            </div>
+                            <div class="photo-actions" style="top: 8px; right: 8px;">
+                                <form action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST">
+                                    <button type="submit" class="delete">🗑</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="color: #888;">Brak zdjęć w galerii.</p>
+            {% endif %}
+
+            <!-- Przycisk usuwania galerii -->
+            <form action="{{ url_for('delete_gallery', gallery_id=gallery.id) }}" method="GET" style="margin-top: 10px;">
+                <button type="submit" style="background: red; color: white; border: none; padding: 6px 10px;
+                        border-radius: 6px; cursor: pointer;">
+                    Usuń całą galerię 🗑
+                </button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+
+<p><a href="{{ url_for('home') }}">← Wróć na stronę główną</a></p>
+
+</body>
+</html>
